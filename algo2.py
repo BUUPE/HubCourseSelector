@@ -31,18 +31,11 @@ def make_query_function(credit_maxes, vectors):
 		for x in v:
 			assert isinstance(x, int), 'A vector value was a non-int'
 			assert x == 0 or x == 1, 'A vector value was not 0 or 1'
-	
-	# These assertions ensure that the tables can be written to file.
-	# TODO: Write the part that writes dynamic programming table to file after computing the table.
-	assert len(credit_maxes) <= (1 << 8)
-	assert len(vectors) <= (1 << 16)
 
 	max_nodes = 1
 	for x in credit_maxes:
 		max_nodes *= x + 1
 	
-	print('Writing tables to file will use {:d} bytes = {:.2f} KB = {:.2f} MB disk space.'.format(max_nodes * 3, max_nodes * 3 / 1024, max_nodes * 3 / 1024 / 1024))
-
 	# Sort vectors
 	vectors = sorted(vectors, reverse = True)
 
