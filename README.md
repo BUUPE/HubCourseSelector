@@ -15,6 +15,7 @@ The main programs are a web scraper for the BU course search page and algorithms
 | download\_problems.py | Scrapes the BU course search page and writes information to vector problem files. |
 | algo.py | A fast algorithm that computes sets of courses from vector problem files that fulfill exactly credit_maxes. |
 | algo2.py | A slow, complete algorithm that computes sets of courses from vector problem files that fulfill any given subvector of credit\_maxes. |
+| algo3.py | algo2.py but 5x slower and writes tables to a file. |
 | benchmark_results.txt | List of running times for different problem sizes.
 
 download_problems.py will write files for the vector problems outlined by the constants in constants.py. Run this file by running `python download_problems.py` in terminal.

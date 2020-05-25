@@ -2,3 +2,6 @@ __pycache__
 
 # Downloaded algorithm problems are stored here
 Problem/
+
+# Dynamic programming tables are stored here
+Solution/

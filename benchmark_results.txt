@@ -11,17 +11,23 @@ algo2 not tested yet, but it's probably 10e6 nodes and 120+15 minutes
 F1:
 algo2 3.3e6 nodes, 20+3 minutes
 
+
 F2:
 algo2 1.1e6 nodes, 6+1 minutes
+algo3 28+6 minutes
 
 F3:
 algo2 368e3 nodes, 77+16 seconds
+algo3 386+130 seconds
 
 F4:
 algo2 147e3 nodes, 20+5 seconds
+algo3 88+40 seconds
 
 F5:
 algo2 49e3 nodes, 4+2 seconds
+algo3 18+11 seconds
 
 F6:
 algo2 16e3 nodes, 1+1 seconds
+algo3 5+4 seconds
