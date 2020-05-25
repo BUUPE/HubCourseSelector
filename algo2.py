@@ -186,7 +186,7 @@ if __name__ == '__main__':
 	if len(sys.argv) != 2:
 		print('Usage:')
 		print()
-		print('python3 algo.py filename')
+		print('python3 {:s} filename'.format(__file__))
 	else:
 		credit_maxes, unsorted_vectors = read_problem(sys.argv[1])
 		query = make_query_function(credit_maxes, unsorted_vectors)
