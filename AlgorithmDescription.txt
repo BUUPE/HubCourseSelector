@@ -1,0 +1,47 @@
+The problem that our algorithm has to solve is more or less given the hub units that each course fulfills (called the vectors) and the required number of each credit (called the credit_maxes vector), compute a minimal subset of the vectors such that its sum is no less than the credit_maxes vector in each component. Additionally, we hope that we can solve modified versions of this problem (like some courses or sets of courses must be included/excluded or compute all subsets no bigger than k vectors bigger than the minimal subset) with minimal modifications to the algorithm.
+
+The algorithm input requires the credit_maxes and the vectors.
+The credit_maxes is a vector of the numbers of credits that are required for each hub unit category.
+The vectors is a list of vectors which tells how many of each hub unit each course fulfills.
+
+Credit categories are sorted in the order they appear in.
+Vectors are sorted by lexicographical order of the credits they fulfill.
+Sets of vectors are ordered as follows:
+	Let A and B be two sets of vectors.
+	If one set is smaller, it is lesser.
+	Otherwise, the set with the greatest vector is greater.
+	Otherwise, the set with the second greatest vector is greater.
+	Otherwise, the set with the third greatest vector is greater.
+	etc. This step is equivalent to lexicographical order of the reverse of the sorted vector.
+	Otherwise, it is the case that the sets of vectors are equal.
+
+Basically, we enumerate over all subsets of courses and for each subset, compute the credits that are not yet fulfilled. table1 is a dict with keys being unfulfilled credit vectors and their corresponding values the size of the minimal set of courses that leaves exactly that unfulfilled credit vector unfulfilled. We enumerate subsets in order. The order was chosen very carefully. TODO: List the reasons for using the order of sets of vectors that we do.
+
+BUT!!! If taking two different sets of courses results in exactly the same vector of unfulfilled credits, then we only put the lesser set into the queue.
+
+table2 is something such that:
+if old_credits in table2[new_credits][i] then vector_sub(old_credits, vectors[i]) == new_credits
+which is approximately
+"If you have a set S of courses and S fulfills exactly new_credits and i < min(S), then the union of S and {i} fulfills old_credits and gets you one class closer to fulfilling all the hub credits"
+table1 and table2 are the dynamic programming tables that the algorithm generates. A separate procedure reads sets of courses off of table1 and table2.
+table2 was originally used to break ties between computation paths that followed subsets of courses of the same size. I'm not sure it's used like that anymore. I'm not sure it's needed for that purpose, either.
+
+The rest of the work of writing code went into trying to make the operations run faster or to store already computed values for when they are needed later.
+
+From my attempts at eliminating table2 and simply reading results off of onnly table1, I didn't see an efficient way to find a minimal set of courses that fulfills all the credits because I didn't see how to answer the following question:
+
+"Given a set of courses S and a course i such that i not in S, does there exist a set T of courses such that T fulfills all the credits and i in T and S is a subset of T and there does not exist a set U of courses such that U is smaller than T and S is a subset of U?"
+
+which is basically "If I have selected some courses, will selecting this next course lead me closer to graduation by 1 course?" Using table2 lets you know that if you select some courses S with high numbers, then you can go to whichever different unfulfilled credit vectors v by selecting some course i where i < min(S) and that while creating the tables, a subset T of size table1[v] was found and max(T) in table2[v].
+
+From ProblemComplexity.txt, you can see that some generalized version of this problem is NP-hard. Some issues I ran into that prevented me from creating polynomial-time procedures mostly fell into one of two categories:
+
+Losing information: For example, with only table1, the table that goes from unfulfilled credit vectors v to the size of the minimal set of courses needed to go from credit_maxes to v, I wasn't sure how to find a minimal set of courses that fulfills a given set of credits.
+
+Working with values after constraining: Constraining is when you set a negative value to 0. This happens when doing vector_sub. Like if you have [1, 1, 0] vector and you subtract [1, 0, 1], then you get [0, 1, 0]. The 0 - 1 = -1 in the rightmost spot gets constrained to 0. Now if the credit vector you have to fulfill is [1, 0, 0], then you can take a class that gives [1, 0, 0] or [1, 0, 1] or [1, 1, 0] or [1, 1, 1] and so vector_sub doesn't exactly have an inverse when the value gets constrained.
+
+BEWARE!!! table1 is only partially filled, where there is a set of courses that fulfills EXACTLY the credit vector that is the index to the table. Because of constraining of values, I have not found a polynomial algorithm to fill the rest of table1 according to the definition of table1 after the main while loop terminates. You may be able to make it faster by recursing in a smart way and terminating the recursion prematurely but I'm not sure. I haven't tried.
+
+BEWARE!!! At the last minute, several issues with correctness were discovered. The recursive process of enumerating sets of vectors was stopped prematurely if it was determined that no deeper set of vectors could fulfill credit_maxes. In short, algo.py is able to suggest all minimal sets that fulfill exactly credit_maxes, but not able to suggest all minimal sets that fulfill some proper subset of credit_maxes (and in some cases, not able to suggest any sets at all, even when such sets exist). However, several optimizations were able to be applied, which brought computation time down to 5 minutes.
+
+algo2.py truly enumerates over all subsets while skipping over duplicate subsets that fulfill the same set of units, so all fulfilling subsets can be found from the tables. It requires much more computational resources to run, but is still not prohibitively expensive to run. It appears as though the dynamic programming table for algo2.py takes 35MB to write. TODO: Write the program that writes the dp tables to disk and read from disk.

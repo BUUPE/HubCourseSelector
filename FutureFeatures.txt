@@ -1,0 +1,29 @@
+Make the entire algorithm use fewer computational resources or return more valid answers.
+	Computational resources mainly refer to disk space, computation time, memory usage.
+	There are many ways in which the algorithm is suboptimal.
+	One main part of the algorithm is to read the vector problem and create dynamic programming tables (once per semester) which are used to answer students' queries. The part of the algorithm that reads from the dynamic programming tables may do so probabilistically and it is not guaranteed that one or more fresh results are returned. It is desirable to optimize the amount of unique results returned after reading from the dynamic programming tables for a certain amount of time.
+	The algorithm itself likely can be changed to achieve better bounds on computational resource usage.
+	The line-by-line implementations of the procedures that the algorithm demands can possibly be improved.
+	We may have multiple algorithms implemented and some may be more optimal for different problem sizes. After a student inputs their information, we can quickly view their inputs and select the fastest algorithm for the problem size.
+		For example, the transfer student problem is so small that dynamic programming tables can be computed in 1 second. Here, we can use deterministic algorithms that enumerate over everything to find all answers instead of trying to use random moves to optimize for speed.
+	It may save time or space to cache or not cache certain computed values between the time that they are computed and the time that they are used. This is particularly relevant in level-order tree traversals.
+
+Make a website where any BU student can visit and input their hub information (unfulfilled credits, courses to exclude, if transfer student or first year) and be suggested courses or sets of courses.
+
+We can use automated scripts to register for courses as soon as a spot opens up.
+Fellow UPE member Julius Frost has done something like this. https://github.com/juliusfrost/BU-Registration-Bot
+This may not work anymore due to studentlink's 2 factor authentication. Haven't tried.
+After a student uses our other tools to find the courses they want to sign up for, we'd run scripts on our server that keep attempting to register for them.
+Julius Frost's method requires a machine to be running 24/7, so if we had a server hosting a website for students to use our tool, we can probably use the same server to make the automated register requests.
+
+Of course, we can always clean up the code but technically it does not improve our ability to develop new features quickly.
+Be careful of refactoring performance-critical sections of code. For example, inlining vector_sub function calls saves A TON of time but the resulting line of code is long and not exactly pretty.
+
+We can support new ways to search for courses. The only way that we let students access suggestions is by inputting a set of credits to be fulfilled.
+	The code can be changed slightly to exclude all suggestions that contain particular courses.
+	Students may wish to see suggestions that contain a particular set of courses.
+	Students may wish to see sets of courses that are not minimal. This suggestion is relevant if our tool shows only minimal sets given their situation but there exist few minimal sets and the student doesn't like any minimal set.
+
+Currently, the algorithm only works with vectors, not course codes. We'll need to make a procedure that finds course codes that correspond to the returned vectors.
+
+Currently, the dynamic programming tables are stored in memory and they have to be recomputed every time the script is run. To avoid recomputing the tables and storing them in memory, we can make programs that write the tables to files and then read from those files.

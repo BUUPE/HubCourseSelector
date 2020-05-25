@@ -1,0 +1,69 @@
+The BU course search page: https://www.bu.edu/phpbin/course-search/
+The BU course search page will be referred to as "the search page."
+The page which displays results from the search page is the results page.
+
+request_courses uses the requests library (needs pip install) to make a connection to the search page and download the html.
+read_downloaded_html uses regex to extract information about each course from the html. If the html structure of the results page is changed, the regex pattern may need to be changed.
+The inputs to request_courses are a semester code and a hub credit code.
+The return value of read_downloaded_html is a list of dicts. Each dict represents one course. The keys are College, Department, Course Number, Title, Prereq, Grad Prereq, Coreq, Grad Coreq, Description, and Credits.
+
+The headers, params, and url of the request made during request_courses are all constants that may need to be changed each semester.
+To find the correct headers, params, and url, do the following:
+Use google chrome as your web browser for all of this. Google chrome's F12 DevTools are used here.
+
+Go to the search page.
+Search for all classes that grant the Philosophical Inquiry and Life's Meanings (PLM) unit.
+Hit the search button so you see the results.
+Look at the URL at the top of your web browser. Everything before the first question mark is the URL.
+In the web browser, change the number of displayed results to ALL results displayed all at once on one page.
+Go to google chrome's devtools, which probably opens by hitting F12.
+Navigate to the Network tab at the top.
+Hit CTRL + R as instructed to refresh.
+Now, you should see a bunch of network traffic displayed. Look for the one that has the name "search.php?..." with a bunch of stuff at the end.
+You should see a section with all the details about that internet request. Make sure that the request URL is almost exactly the URL shown in the web browser.
+Scroll down the Request Headers. Use these for the headers in the source code of the scraper. Not all are necessary.
+In the Accept header, use 'text/html' only.
+Find the Request URL.
+Take everything to the right of the first question mark. Here's how to parse that string to gather the necessary params.
+Split by &. Each resulting string is a different param.
+If there is % followed by two hex chars, that is probably representing a single ascii character. Use an ascii table to convert from hex to ascii.
+Everything to the left of the equals sign is the name of the param (the key in the param dict) and everything to the right of the equals sign is the value of the param (the value for that key).
+	If the value is an integer, perhaps in python source code it can be written as a python native integer. Everything else is a string as it appears in the URL, unless it is the hex of an ascii char, in which case put the character.
+	If things don't work then try changing ints to strs. If things still don't work, try removing/fiddling with [] and python native lists. This is probably not the correct solution, though.
+If a key appears twice, use the last occurrence of that key.
+If there is nothing to the right of the equals sign, the value is the empty string.
+Go to the results from the search page. View the page source code. CTRL + U might be the hotkey. You should see the page's html now.
+See the html that describes each button/drop down/checkbox/text field that describes the search filters. You can see the legal values for each param there. That way, you can see what values need to be put for each different semester and each different hub credit. You'll need to iterate over all these codes in the source code.
+Look for the page size param legal values and find the one that displays all results at once. This value is probably -1, no guarantees though. Be sure to use this value in the source code.
+Look for the credits param legal values and find the one for Any or whatever value excludes no results. This value is probably *, no guarantees though. Be sure to use this value in the source code.
+Apparently there is a new search option that says "Courses that match (All/Any) of the Hub areas selected will be displayed.". Use the option for All for historical reasons.
+
+As of May 21, 2020, the hub code param values are:
+Philosophical, Aesthetic, and Historical Interpretation
+	A = Philosophical Inquiry and Life's Meanings
+	B = Aesthetic Exploration
+	C = Historical Consciousness
+Scientific and Social Inquiry
+	D = Scientific Inquiry I
+	F = Scientific Inquiry II
+	E = Social Inquiry I
+	P = Social Inquiry II
+Quantitative Reasoning
+	G = Quantitative Reasoning I
+	H = Quantitative Reasoning II
+Diversity, Civic Engagement, and Global Citizenship
+	I = The Individual in Community
+	J = Global Citizenship and Intercultural Literacy
+	K = Ethical Reasoning
+Communication
+	L = First-Year Writing Seminar
+	M = Writing, Research, and Inquiry
+	6 = Writing-Intensive Course
+	N = Oral and/or Signed Communication
+	O = Digital/Multimedia Expression
+Intellectual Toolkit
+	1 = Critical Thinking
+	2 = Research and Information Literacy
+	3 = Teamwork/Collaboration
+	4 = Creativity/Innovation
+

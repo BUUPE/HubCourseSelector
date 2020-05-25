@@ -1,0 +1,50 @@
+Number of courses is always unbounded.
+n is always the number of courses.
+The different problems considered have different numbers of categories or max credits per category.
+A valid problem instance has one or more credits required in each category. If a category has 0 required credits, then reformulate the problem with that category removed.
+Note that some analysis may assume that a course fulfills no more than 1 credit per category.
+Each course may be taken at most 1 time. No negatives, fractions, etc.
+
+Unbounded categories
+Unbounded credits per category
+
+NP:
+Is special case of integer linear programming
+
+Unbounded categories
+1 credit per category
+
+NP-hard:
+Set cover reduces to this.
+Categories are elements.
+Courses are sets of elements.
+
+Unbounded categories
+1 credit per category
+
+NP-hard:
+Set cover reduces to this.
+Categories are elements.
+Courses are sets of elements.
+
+k categories
+1 credit per category
+
+TIME(O(n^k) * some small polynomial):
+A set of courses that fulfills the requirements but for which no proper subset fulfills the requirements has at most k courses.
+	Suppose a set S fulfills all the requirements and has k+1 courses.
+		Remember that no course c fulfills 0 credits in all categories.
+		For each category, select one course in S that grants that category's credit. The selected courses form a proper subset of courses that fulfills the requirements.
+There are at most C(n, k) sets of courses that fulfill the requirements but for which no proper subset fulfills the requirements. C(n, k) is in O(n^k).
+
+k categories
+m credit per category
+
+TIME(O(n^(mk)) * some small polynomial):
+This is the same as k categories, 1 credit per category except that now, the sets of courses that have no unneeded classes have size at most mk, so enumerate over all of those.
+
+p total credits (sum of required credits over all categories)
+
+TIME(O(n^p) * some small polynomial):
+This is the same as k categories, 1 credit per category except that now, the sets of courses that have no unneeded classes have size at most p, so enumerate over all of those.
+

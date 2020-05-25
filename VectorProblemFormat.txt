@@ -1,0 +1,26 @@
+1 line: A, the number of lines of metadata. 0 <= A
+A lines: Metadata of the problem. Not the actual problem input itself. For example, course information, time created, etc.
+1 line: M, the length of vectors. 1 <= M
+1 line: N, the number of vectors. 1 <= N
+1 line:
+	The graduation requirement vector. Also known as credit_maxes vector.
+	The line contains M integers which are the integers of the vector.
+	Integers are separated by one or more spaces.
+	The line may have leading spaces and trailing spaces.
+	Integers are represented using only digits.
+N lines:
+	Each line contains one integer for the vector id followed by M integers which are the integers of the vector.
+	The vector ids start at 0 and increase by 1.
+	Integers on a line are separated by one or more spaces.
+	Lines may have leading spaces and trailing spaces.
+	Integers are represented using only digits.
+
+A line not followed by a line does not need to end with a new line character.
+Under this format, a problem is described entirely by one file.
+
+The N vectors are called the course vectors.
+
+This describes the input. It is up to other programs to compute what they wish from the input.
+For example, they may wish to compute a minimal subset of vectors such that each component of the vector sum is no less than the corresponding component of the credit_maxes vector.
+
+Programs can extract the course vectors and credit_maxes vector by using the read_problem function from download_problems.py.
