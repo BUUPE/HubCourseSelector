@@ -218,7 +218,6 @@ class Table:
 
 # Input: the credit_maxes and vectors of the vector problem
 # Return: A function that takes as input a set of unfulfilled credits and returns a set of indices of vectors that fulfills those credits
-# TODO: The vectors were sorted, so they are not in the same order as the input order. Make something so that the return value makes sense with the vectors in the order from the input.
 # TODO: Change return value to vectors selected or course codes selected.
 def make_query_function(credit_maxes, vectors, table_file_name):
 	start = time.time()
